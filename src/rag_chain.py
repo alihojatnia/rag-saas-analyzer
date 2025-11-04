@@ -1,5 +1,5 @@
 from langchain.prompts import PromptTemplate
-from langchain.llms import HuggingFacePipeline
+from langchain_community.llms import HuggingFacePipeline
 from langchain.schema import Document
 from transformers import pipeline
 from typing import Tuple, Dict, List
@@ -10,7 +10,7 @@ from .utils import log, get_today
 def _get_llm():
     pipe = pipeline(
         "text-generation",
-        model="77M",  # Use distilgpt2's smallest variant
+        model="distilgpt2",
         max_length=256,
         truncation=True,
         device=-1,
@@ -18,8 +18,8 @@ def _get_llm():
     return HuggingFacePipeline(pipeline=pipe)
 
 
-@log.info
 def build_rag_chain(db):
+    log.info("Building RAG chain...")
     llm = _get_llm()
     retriever = db.as_retriever(search_kwargs={"k": 2})
 
