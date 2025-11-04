@@ -5,7 +5,7 @@ from src.rag_chain import build_rag_chain
 from src.utils import log
 
 st.set_page_config(page_title="SaaS Spend Analyzer", layout="centered")
-st.title("RAG SaaS Contract Analyzer (Demo)")
+st.title("Contract Analyzer")
 
 # -------------------------------------------------
 # 1. Upload & index
