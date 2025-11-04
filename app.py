@@ -10,14 +10,14 @@ st.title("Contract Analyzer")
 # -------------------------------------------------
 # 1. Upload & index
 # -------------------------------------------------
-pdf_file = st.file_uploader("Upload SaaS contract (PDF)", type="pdf")
+pdf_file = st.file_uploader("Upload contract (PDF)", type="pdf")
 
 if pdf_file and st.button("Index PDF"):
     with st.spinner("Reading & indexing…"):
         text = load_pdf(pdf_file.read())
         db = build_vectorstore(text)
         st.session_state.db = db
-        st.success("Indexed – ask away!")
+        st.success("Indexed – ask me anything :) !")
 
 # -------------------------------------------------
 # 2. Query
