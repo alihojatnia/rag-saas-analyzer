@@ -2,21 +2,18 @@ from langchain.prompts import PromptTemplate
 from langchain.llms import HuggingFacePipeline
 from langchain.schema import Document
 from transformers import pipeline
-from typing import Tuple, Dict
+from typing import Tuple, Dict, List
 import json
 from .utils import log, get_today
 
 
-# -------------------------------------------------
-# LLM (cached once)
-# -------------------------------------------------
 def _get_llm():
     pipe = pipeline(
         "text-generation",
-        model="distilgpt2",
+        model="77M",  # Use distilgpt2's smallest variant
         max_length=256,
         truncation=True,
-        device=-1,               # CPU
+        device=-1,
     )
     return HuggingFacePipeline(pipeline=pipe)
 
@@ -44,7 +41,6 @@ Return **only** valid JSON:
         full_prompt = prompt.format(context=context, question=query, today=get_today())
         raw = llm(full_prompt)
 
-        # crude JSON extraction (robust for demo)
         try:
             start = raw.find("{")
             end = raw.rfind("}") + 1
@@ -54,8 +50,7 @@ Return **only** valid JSON:
             log.warning(f"JSON parse failed: {e}")
             data = {"error": "LLM did not return valid JSON", "raw": raw}
 
-        # citation = first chunk snippet
-        citation = docs[0].page_content[:80] + "…" if docs else ""
+        citation = docs[0].page_content[:80] + "..." if docs else ""
         data.setdefault("citation", citation)
 
         return data, raw
